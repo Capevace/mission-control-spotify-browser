@@ -1,6 +1,6 @@
 <template>
   <div class="player-playback" v-if="context">
-    <div class="player-playback__time">{{progress | msToMinutes}}</div>
+    <div class="player-playback__time">{{ progress | msToMinutes }}</div>
     <div class="player-playback__progress-bar">
       <vue-slider
         v-model="progress"
@@ -10,100 +10,99 @@
         :max="songDuration"
         :tooltip="false"
         :dot-size="15"
-        :process-style="{'background': '#1db954'}"
-        :bg-style="{'background': '#737575'}"
+        :process-style="{ background: '#a4a1ed' }"
+        :bg-style="{ background: '#3d3c5a' }"
       />
     </div>
-    <div class=" player-playback__time">{{songDuration | msToMinutes}}</div>
+    <div class=" player-playback__time">{{ songDuration | msToMinutes }}</div>
   </div>
 </template>
 
 <script>
-  import api from '@/api'
-  import {mapGetters} from 'vuex'
+import api from '@/api';
+import { mapGetters } from 'vuex';
 
-  export default {
-    name: 'player-player-playback',
+export default {
+  name: 'player-player-playback',
 
-    data() {
-      return {
-        progress: 0,
-        progressInterval: null,
-        isDragStart: false,
-        songDuration: 0
+  data() {
+    return {
+      progress: 0,
+      progressInterval: null,
+      isDragStart: false,
+      songDuration: 0
+    };
+  },
+
+  computed: {
+    ...mapGetters('player', {
+      playback: 'getPlayback',
+      context: 'getPlaybackContext',
+      isPlaying: 'isPlaying'
+    })
+  },
+
+  methods: {
+    updateProgress() {
+      clearInterval(this.progressInterval);
+      this.progress = this.context.position;
+
+      if (!this.context.paused) {
+        this.progressInterval = setInterval(() => {
+          if (this.playback && this.progress + 1000 <= this.songDuration) {
+            this.progress = this.progress + 1000;
+          }
+        }, 1000);
       }
     },
 
-    computed: {
-      ...mapGetters('player', {
-        playback: 'getPlayback',
-        context: 'getPlaybackContext',
-        isPlaying: 'isPlaying',
-      })
+    onDragStart({ currentValue }) {
+      this.isDragStart = true;
     },
 
-    methods: {
-      updateProgress() {
-        clearInterval(this.progressInterval);
-        this.progress = this.context.position;
+    onDragEnd({ currentValue }) {
+      this.isDragStart = false;
+      api.spotify.player.seekToPosition(currentValue);
+    },
 
-        if (!this.context.paused) {
-          this.progressInterval = setInterval(() => {
-            if (this.playback && ((this.progress + 1000) <= this.songDuration)) {
-              this.progress = this.progress + 1000;
-            }
-          }, 1000);
-        }
-      },
-
-      onDragStart({currentValue}) {
-        this.isDragStart = true;
-      },
-
-      onDragEnd({currentValue}) {
+    onProgressChange(currentValue) {
+      if (!this.isDragStart) {
         this.isDragStart = false;
         api.spotify.player.seekToPosition(currentValue);
-      },
-
-      onProgressChange(currentValue) {
-        if (!this.isDragStart) {
-          this.isDragStart = false;
-          api.spotify.player.seekToPosition(currentValue);
-        }
       }
-    },
-
-    watch: {
-      playback() {
-        this.songDuration = this.playback.item.duration_ms
-      },
-
-      context() {
-        this.progress = this.context.position;
-      },
-
-      isPlaying() {
-        this.updateProgress();
-      }
-    },
-
-    created() {
-      this.updateProgress();
-      this.songDuration = this.playback.item.duration_ms;
     }
+  },
+
+  watch: {
+    playback() {
+      this.songDuration = this.playback.item.duration_ms;
+    },
+
+    context() {
+      this.progress = this.context.position;
+    },
+
+    isPlaying() {
+      this.updateProgress();
+    }
+  },
+
+  created() {
+    this.updateProgress();
+    this.songDuration = this.playback.item.duration_ms;
   }
+};
 </script>
 
 <style lang="sass">
 
-  .player-playback
-    display: flex
+.player-playback
+  display: flex
+  width: 100%
+
+  &__time
+    min-width: 40px
+
+  &__progress-bar
     width: 100%
-
-    &__time
-      min-width: 40px
-
-    &__progress-bar
-      width: 100%
-
 </style>

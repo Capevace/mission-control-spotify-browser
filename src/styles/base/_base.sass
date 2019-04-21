@@ -1,16 +1,18 @@
 @import '~normalize-scss/sass/normalize'
-@import url('https://fonts.googleapis.com/css?family=Open+Sans')
+@import url('https://fonts.googleapis.com/css?family=Fira+Sans')
 
 +normalize
 
 html
   box-sizing: border-box
-  font-family: 'Open Sans', sans-serif
+  font-family: 'Fira Sans', sans-serif
 
   // Set box-sizing globally to handle padding and border widths
   *,
   *::before,
   *::after
+    -webkit-font-smoothing: antialiased
+    -moz-osx-font-smoothing: grayscale
     box-sizing: inherit
 
 button

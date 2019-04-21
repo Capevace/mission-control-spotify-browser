@@ -1,7 +1,8 @@
 import api from '@/api';
 
 const state = {
-  accessToken: '',
+  accessToken:
+    'BQBOF5vsg_0TrBxpDoSCiuLlxJuF0g_syhPQJ3PxXZKRwY5Vgf6xgnMWI5lHsyaWgo3zi1-BBlVBs_tqcx6lEMeHbF02c8lD-0-qr3g8NcZFk4zgw_SGEkSK3oiiKlPVhhR4Su7FFGJj7o44sLU-BqQb_DzB63fKIwLP7UXD3UWoOvzEQrxScnWEC_SnPx9IcIuT13TRgiL2W-Q2prLgJohx8RWjUDsggYoHAsneEZ9iRM4D95GIbm6ISaYMAWvGQgNpdk3a-pKyEw',
   refreshToken: '',
   expiryTime: ''
 };
@@ -23,35 +24,36 @@ const mutations = {
 
   SET_EXPIRY_TIME(state, time) {
     state.expiryTime = time;
-  },
+  }
 };
 
 const actions = {
-  login: async function () {
-    try {
-      const response = await api.auth.getUserAuthURL();
-      if (response.data) {
-        window.location.href = response.data;
-      }
-    } catch (e) {
-      console.log(e);
-    }
+  login: async function() {
+    // try {
+    //   const response = await api.auth.getUserAuthURL();
+    //   if (response.data) {
+    //     window.location.href = response.data;
+    //   }
+    // } catch (e) {
+    //   console.log(e);
+    // }
   },
 
-  refreshToken: async function ({commit, state}) {
-    try {
-      if (state.refreshToken) {
-        const response = await api.auth.refreshToken(state.refreshToken);
-        commit('SET_ACCESS_TOKEN', response.data.access_token);
+  refreshToken: async function({ commit, state }) {
+    console.log('TRYING TO REFRESH TOKEN');
+    // try {
+    //   if (state.refreshToken) {
+    //     const response = await api.auth.refreshToken(state.refreshToken);
+    //     commit('SET_ACCESS_TOKEN', response.data.access_token);
 
-        return response;
-      }
-    } catch (e) {
-      console.log(e);
-    }
+    //     return response;
+    //   }
+    // } catch (e) {
+    //   console.log(e);
+    // }
   },
 
-  logout: function () {
+  logout: function() {
     let script = document.createElement('script');
 
     script.src = 'https://www.spotify.com/logout/';
@@ -60,20 +62,20 @@ const actions = {
     window.localStorage.clear();
     window.sessionStorage.clear();
 
-    setTimeout(function () {
+    setTimeout(function() {
       location.reload();
-    }, 1000)
+    }, 1000);
   },
 
-  setAccessToken({commit}, token) {
+  setAccessToken({ commit }, token) {
     commit('SET_ACCESS_TOKEN', token);
   },
 
-  setRefreshToken({commit}, token) {
+  setRefreshToken({ commit }, token) {
     commit('SET_REFRESH_TOKEN', token);
   },
 
-  setExpiryTime({commit}, time) {
+  setExpiryTime({ commit }, time) {
     commit('SET_EXPIRY_TIME', time);
   }
 };

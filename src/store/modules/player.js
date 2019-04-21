@@ -22,11 +22,11 @@ const mutations = {
   },
   SET_PLAYBACK_CONTEXT(state, playback) {
     state.playbackContext = playback;
-  },
+  }
 };
 
 const actions = {
-  init: async function ({commit, rootGetters, dispatch}) {
+  init: async function({ commit, rootGetters, dispatch }) {
     window.onSpotifyWebPlaybackSDKReady = () => {};
 
     async function waitForSpotifyWebPlaybackSDKToLoad() {
@@ -54,32 +54,33 @@ const actions = {
     }
 
     (async () => {
-      const {Player} = await waitForSpotifyWebPlaybackSDKToLoad();
+      const { Player } = await waitForSpotifyWebPlaybackSDKToLoad();
       const token = rootGetters['auth/getAccessToken'];
 
       // eslint-disable-next-line
       const player = new Player({
-        name: 'Vue Spotify Web Player',
+        name: 'HAL6900 Spotify Player',
         getOAuthToken: cb => {
           cb(token);
         }
       });
 
       // Error handling
-      player.addListener('initialization_error', ({message}) => {
+      player.addListener('initialization_error', ({ message }) => {
         console.error(message);
       });
 
-      player.addListener('authentication_error', ({message}) => {
+      player.addListener('authentication_error', ({ message }) => {
         console.error(message);
-        dispatch('auth/login', null, {root: true});
+        console.log('AUTH');
+        // dispatch('auth/login', null, { root: true });
       });
 
-      player.addListener('account_error', ({message}) => {
+      player.addListener('account_error', ({ message }) => {
         console.error(message);
       });
 
-      player.addListener('playback_error', ({message}) => {
+      player.addListener('playback_error', ({ message }) => {
         console.error(message);
       });
 
@@ -89,11 +90,11 @@ const actions = {
           dispatch('setPlaybackContext', state);
           dispatch('setPlayback');
         }
-        //console.log(state);
+        console.log('player state', state);
       });
 
       // Ready
-      player.addListener('ready', ({device_id}) => {
+      player.addListener('ready', ({ device_id }) => {
         console.log('Ready with Device ID', device_id);
         commit('SET_DEVICE_ID', device_id);
 
@@ -101,20 +102,20 @@ const actions = {
       });
 
       // Not Ready
-      player.addListener('not_ready', ({device_id}) => {
+      player.addListener('not_ready', ({ device_id }) => {
         console.log('Device ID has gone offline', device_id);
       });
 
       // Connect to the player!
       let connected = await player.connect();
 
-      if(connected) {
+      if (connected) {
         await waitUntilUserHasSelectedPlayer(player);
       }
     })();
   },
 
-  async setPlayback({commit}) {
+  async setPlayback({ commit }) {
     try {
       const response = await api.spotify.player.getCurrentPlayback();
       commit('SET_PLAYBACK', response.data);
@@ -123,7 +124,7 @@ const actions = {
     }
   },
 
-  setPlaybackContext({commit}, context) {
+  setPlaybackContext({ commit }, context) {
     commit('SET_PLAYBACK_CONTEXT', context);
   }
 };

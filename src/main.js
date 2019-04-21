@@ -1,14 +1,15 @@
-import Vue from 'vue'
-import App from './App.vue'
+import Vue from 'vue';
+import App from './App.vue';
 
-import router from './router'
-import store from './store'
+import router from './router';
+import store from './store';
+import socket from './socket';
 
-import Icon from 'vue-awesome/components/Icon'
-import VModal from 'vue-js-modal'
-import VueMoment from 'vue-moment'
-import VueLazyload from 'vue-lazyload'
-import vueSlider from 'vue-slider-component/src/vue2-slider.vue'
+import Icon from 'vue-awesome/components/Icon';
+import VModal from 'vue-js-modal';
+import VueMoment from 'vue-moment';
+import VueLazyload from 'vue-lazyload';
+import vueSlider from 'vue-slider-component/src/vue2-slider.vue';
 
 import './directives';
 import './filters';
@@ -25,7 +26,7 @@ Vue.use(VueLazyload);
 Vue.config.productionTip = false;
 
 new Vue({
-  router,
-  store,
-  render: h => h(App)
+	router,
+	store,
+	render: h => h(App)
 }).$mount('#app');

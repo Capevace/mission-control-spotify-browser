@@ -20,11 +20,11 @@ Vue.use(Vuex);
 const persistedState = vuexPersistedstate({
   key: 'spotify_app_state',
   reducer: state => ({
-    auth: state.auth,
-  }),
+    auth: state.auth
+  })
 });
 
-export default new Vuex.Store({
+const store = new Vuex.Store({
   modules: {
     app,
     auth,
@@ -33,8 +33,12 @@ export default new Vuex.Store({
     player,
     library,
     playlist,
-    notification,
+    notification
   },
   plugins: [spotifyApiPlugin, persistedState],
   strict: debug
 });
+
+window.store = store;
+
+export default store;
