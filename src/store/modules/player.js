@@ -59,7 +59,7 @@ const actions = {
 
       // eslint-disable-next-line
       const player = new Player({
-        name: 'HAL6900 Spotify Player',
+        name: 'Mission Control Spotify',
         getOAuthToken: cb => {
           cb(token);
         }

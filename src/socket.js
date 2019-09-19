@@ -1,10 +1,10 @@
 import store from './store';
 import { MissionControlClient } from 'mission-control-client';
 
-const urlParams = new URLSearchParams(window.location.search);
-const missionControlUrl = urlParams.get('url');
-const apiToken = urlParams.get('token');
+const missionControlUrl = window.MISSION_CONTROL_URL;
+const apiToken = window.MISSION_CONTROL_TOKEN;
 
+console.log('Connecting to URL', missionControlUrl);
 console.log('Using API token', apiToken);
 
 const client = new MissionControlClient(missionControlUrl, apiToken);
