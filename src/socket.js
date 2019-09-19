@@ -1,29 +1,33 @@
-import io from 'socket.io-client';
 import store from './store';
+import { MissionControlClient } from 'mission-control-client';
 
-const socket = io();
+const urlParams = new URLSearchParams(window.location.search);
+const missionControlUrl = urlParams.get('url');
+const apiToken = urlParams.get('token');
 
-socket.on('connect', () => {
-	console.log('Connected to Mission Control.');
+console.log('Using API token', apiToken);
 
-	socket.emit('subscribe', {
-		event: 'update:spotify'
-	});
+const client = new MissionControlClient(missionControlUrl, apiToken);
+ 
+// Listen to socket events
+client.on('connect', () => {
+    console.log('Connected to mission control');
 });
-
-socket.on('disconnect', () => {
-	console.log('Disconnected to Mission Control.');
+ 
+client.on('disconnect', reason => {
+    console.log('Disconnected from mission control:', reason);
 });
-
-socket.on('initial-state', data => {
+ 
+client.on('initial-state', data => {
 	console.log('Got state', data);
 	const spotifyState = data.state.spotify;
 
 	store.commit('auth/SET_ACCESS_TOKEN', spotifyState.accessToken);
 });
 
-socket.on('update:spotify', data => {
+client.subscribe('update:spotify', data => {
 	console.log('Got update', data);
-	const spotifyState = data.state.spotify;
+
+    const spotifyState = data.state.spotify;
 	store.commit('auth/SET_ACCESS_TOKEN', spotifyState.accessToken);
 });

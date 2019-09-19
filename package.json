@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "axios": "^0.18.0",
+    "mission-control-client": "^1.1.0",
     "optiscroll": "^3.2.1",
     "socket.io-client": "^2.2.0",
     "vue": "^2.5.16",
