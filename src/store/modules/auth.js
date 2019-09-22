@@ -1,8 +1,7 @@
 import api from '@/api';
 
 const state = {
-  accessToken:
-    'BQBOF5vsg_0TrBxpDoSCiuLlxJuF0g_syhPQJ3PxXZKRwY5Vgf6xgnMWI5lHsyaWgo3zi1-BBlVBs_tqcx6lEMeHbF02c8lD-0-qr3g8NcZFk4zgw_SGEkSK3oiiKlPVhhR4Su7FFGJj7o44sLU-BqQb_DzB63fKIwLP7UXD3UWoOvzEQrxScnWEC_SnPx9IcIuT13TRgiL2W-Q2prLgJohx8RWjUDsggYoHAsneEZ9iRM4D95GIbm6ISaYMAWvGQgNpdk3a-pKyEw',
+  accessToken: '',
   refreshToken: '',
   expiryTime: ''
 };
@@ -39,8 +38,11 @@ const actions = {
     // }
   },
 
-  refreshToken: async function({ commit, state }) {
-    console.log('TRYING TO REFRESH TOKEN');
+  refreshToken: function({ commit, state }) {
+    return new Promise(resolve => {
+      console.log('TRYING TO REFRESH TOKEN');
+      setTimeout(resolve, 2000);
+    });
     // try {
     //   if (state.refreshToken) {
     //     const response = await api.auth.refreshToken(state.refreshToken);
