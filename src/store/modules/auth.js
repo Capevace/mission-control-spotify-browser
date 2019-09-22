@@ -1,9 +1,9 @@
 import api from '@/api';
 
 const state = {
-  accessToken: '',
+  accessToken: window.MISSION_CONTROL_SPOTIFY_TOKEN || '',
   refreshToken: '',
-  expiryTime: ''
+  expiryTime: window.MISSION_CONTROL_SPOTIFY_EXPIRY || ''
 };
 
 const getters = {

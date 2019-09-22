@@ -3,6 +3,7 @@ import { MissionControlClient } from 'mission-control-client';
 
 const missionControlUrl = window.MISSION_CONTROL_URL;
 const apiToken = window.MISSION_CONTROL_TOKEN;
+const spotifyApiToken = window.MISSION_CONTROL_SPOTIFY_TOKEN;
 
 console.log('Connecting to URL', missionControlUrl);
 console.log('Using API token', apiToken);
